@@ -6,7 +6,7 @@
 
 
 void setup(){
-  pinMode(A0,INPUT);
+  pinMode(A2,INPUT);
   Serial.begin(9600);
   
 }
@@ -16,7 +16,7 @@ void loop(){
   int co2normalised=0;
   int co2mapped=0;
   for(int i=0;i<10;i++){
-    sum = sum + analogRead(A0);
+    sum = sum + analogRead(A2);
     delay(100);
   }
   co2avg = sum/10;
@@ -26,4 +26,3 @@ void loop(){
   Serial.println(co2mapped);
   Serial.println(co2avg);
 }
-
