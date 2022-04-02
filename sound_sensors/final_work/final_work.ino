@@ -1,7 +1,7 @@
 /*This codes reads the data from port A0 of 
 VMA309, does FFT on polled data. Finds peaks
 If the determined peak is within the expected it 
-lights up the internal LED. This code also incorporated
+lights up the external LED. This code also incorporated
 some trivial background noise avoidance*/
 
 
@@ -32,6 +32,8 @@ void setup()
 //  pinMode(LED_BUILTIN, OUTPUT); //Turns on when high, setting internal led to OUTPUT
   pinMode(Ledgreen,OUTPUT);
   pinMode(Ledwhite,OUTPUT);
+  digitalWrite(Ledwhite,HIGH);
+  digitalWrite(Ledgreen,LOW);
 }
 
 void loop()
@@ -70,7 +72,7 @@ void loop()
   
   for(int i=0;i<10;i++){
     sum = sum + analogRead(A2);
-    delay(100);
+    delay(50);
   }
   co2avg = sum/10;
   co2normalised = co2avg-baseline_raw;
@@ -81,13 +83,15 @@ void loop()
 
   
   if(peak > 245 && peak < 285){
-    if(emer_count <=5 ){
+    if(emer_count <=6){
+      Serial.print("Emer count:");
+      Serial.println(emer_count);
       emer_count+=1;
     }
   }else if(emer_count > 0){
     emer_count--;
   }
-  if(emer_count >= 5){
+  if(emer_count >= 4){
     Serial.println("High");
 //    digitalWrite(LED_BUILTIN, HIGH);
       digitalWrite(Ledgreen,HIGH);
@@ -98,6 +102,5 @@ void loop()
       digitalWrite(Ledwhite,HIGH);
       digitalWrite(Ledgreen,LOW);
   }
-  /*To have gaps between pollings to avoid invoking emer dues to background noise.*/
-  delay(100);
+
 }
